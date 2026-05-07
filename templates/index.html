@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Product Manager
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h4 class="mb-3">Add product:</h4>
+
+    <form method="POST" class="row mb-4">
+      <div class="col-md-2">
+        <input type="text" name="name" class="form-control" placeholder="Назва" required>
+      </div>
+      <div class="col-md-2">
+        <input type="text" name="price" class="form-control" placeholder="Ціна" required>
+      </div>
+      <div class="col-md-2">
+        <input type="text" name='category' class="form-control" placeholder="Категорія" required>
+      </div>
+
+      <div class="col-md-1">
+        <button type="submit" class="btn btn-dark w-100">Додати</button>
+      </div>
+    </form>
+
+    <h4 class="mb-3">Filter:</h4>
+
+    <form method="GET" class="row mb-4">
+      <div class="col-md-2">
+        <select name="category" class="form-select">
+          <option value="all" {% if choice_category=='all' %} selected {% endif %}>All</option>
+          {% for row in categories %}
+            <option value="{{ row.category }}" {% if choice_category==row.category %} selected {% endif %} >
+              {{ row.category.title() }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+          <button type="submit" class="btn btn-dark w-100">Застосувати</button>
+      </div>
+    </form>
+
+    <h4 class="mb-3">Products:</h4>
+
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <td>Name</td>
+                <td>Price</td>
+                <td>Category</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+          {% for item in products %}
+            <tr>
+              <td>{{ item['name'] }}</td>
+              <td>{{ item['price'] }}</td>
+              <td>{{ item['category'] }}</td>
+              <td>
+                <div class="btn-group">
+                    <a href="{{ url_for('edit', name=item['name']) }}" class="btn btn-warning btn-sm">Редагувати</a>
+                    <a href="{{ url_for('delete', name=item['name']) }}" class="btn btn-danger btn-sm ml-2">Видалити</a>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+  </div>
+{% endblock %}
